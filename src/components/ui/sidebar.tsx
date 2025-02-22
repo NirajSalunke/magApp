@@ -2,13 +2,18 @@
 import { cn } from "../../lib/utils";
 // import Link, { LinkProps } from "next/link";
 import { Link } from "@tanstack/react-router";
-import React, { useState, createContext, useContext } from "react";
+import React, {
+  useState,
+  createContext,
+  useContext,
+  MouseEventHandler,
+} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 
 interface Links {
   label: string;
-  href: string;
+  func: MouseEventHandler<HTMLButtonElement>;
   icon: React.JSX.Element | React.ReactNode;
 }
 
@@ -166,8 +171,9 @@ export const SidebarLink = ({
 }) => {
   const { open, animate } = useSidebar();
   return (
-    <Link
-      to={link.href}
+    <button
+      onClick={link.func}
+      // to={link.href}
       className={cn(
         "flex items-center justify-start gap-2  group/sidebar py-2",
         className
@@ -184,6 +190,6 @@ export const SidebarLink = ({
       >
         {link.label}
       </motion.span>
-    </Link>
+    </button>
   );
 };
