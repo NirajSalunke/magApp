@@ -52,6 +52,9 @@ const CreatePat = () => {
       </div>
     );
   }
+
+  const [subMessage, setSubMessage] = useState("Create Patient");
+
   const [date, setDate] = React.useState<Date>();
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -101,6 +104,7 @@ const CreatePat = () => {
   };
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubMessage("Creating Patient...");
     // console.log(data);
     // console.log(`${origin_api}/api/assistant/send-patient-data`);
     try {
@@ -119,12 +123,16 @@ const CreatePat = () => {
         toast({
           variant: "default",
           title: "Patient Created!",
+          description: "Patient created successfully. Redirecting",
         });
+        setSubMessage("Patient Created Successfully!");
+        setSubMessage("Create Patient");
         router.navigate({ to: "/" });
       }
     } catch (error: any) {
       // console.log(error);
       // console.log(error.status);
+      setSubMessage("Something went Wrong, Try Again!!");
       if (error.status === 400) {
         toast({
           variant: "destructive",
@@ -138,12 +146,15 @@ const CreatePat = () => {
           // description: "Patient Already Created!!",
         });
       }
+      setTimeout(() => {
+        setSubMessage("Create Patient");
+      }, 2000);
     }
   };
   return (
     <div className="w-full h-screen p-2 ">
-      <div className=" h-[10vh] mb-5">
-        <h2 className="text-5xl font-extrabold  ">Create</h2>
+      <div className=" h-[10vh] mb-7">
+        <h2 className="text-5xl font-extrabold mb-5 ">Create</h2>
         <p className="">Helpful to add new patient.</p>
       </div>
       <ScrollArea className="h-5/6  border rounded-md  ">
@@ -400,7 +411,7 @@ const CreatePat = () => {
               </LabelInputContainer>
             </div>
           </div>
-          <Button onClick={submit}>Create Patient</Button>
+          <Button onClick={submit}>{subMessage}</Button>
         </form>
       </ScrollArea>
     </div>

@@ -47,6 +47,8 @@ const Discharge = () => {
     return;
   };
 
+  const [subMessage, setSubMessage] = useState("Discharge Patient");
+
   const [items, setItems] = useState({});
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -56,6 +58,7 @@ const Discharge = () => {
   const [date, setDate] = React.useState<Date>();
   const origin_api = import.meta.env.VITE_BACKEND_URL;
   const submit = async (e: React.FormEvent) => {
+    setSubMessage("Discharging Patient...");
     e.preventDefault();
     const data = {
       email,
@@ -82,15 +85,21 @@ const Discharge = () => {
           variant: "default",
           title: "Patient Discharged!",
         });
-        // router.navigate({ to: "/" });
+        setSubMessage("Patient Discharged!");
+        router.navigate({ to: "/" });
+        setSubMessage("Create Patient");
       }
     } catch (error) {
       console.error(error);
+      setSubMessage("Something went Wrong, Try again!");
       toast({
         variant: "destructive",
         title: "Something went Wrong!",
         description: "Failed to Discharge!",
       });
+      setTimeout(() => {
+        setSubMessage("Discharge Patient");
+      }, 2000);
     }
   };
 
@@ -245,7 +254,7 @@ const Discharge = () => {
               ))}
             </div>
           </div>
-          <Button onClick={submit}>Discharge Patient</Button>
+          <Button onClick={submit}>{subMessage}</Button>
         </form>
       </ScrollArea>
     </div>
