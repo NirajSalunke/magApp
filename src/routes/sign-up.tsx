@@ -24,6 +24,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs";
+import axios from "axios";
 
 export const Route = createFileRoute("/sign-up")({
   component: RouteComponent,
@@ -65,37 +66,7 @@ function RouteComponent() {
       seticon(<EyeClosed />);
     }
   };
-  const handleGoogleOAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
 
-    try {
-      if (signIn) {
-        const result = await signIn.authenticateWithRedirect({
-          strategy: "oauth_google",
-          redirectUrl: "/oauth-callback",
-          redirectUrlComplete: "/",
-        });
-        // console.log(result);
-      }
-    } catch (error) {
-      console.error("Google OAuth error:", error);
-    }
-  };
-  const handleGithubOAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      if (signIn) {
-        const result = await signIn.authenticateWithRedirect({
-          strategy: "oauth_github",
-          redirectUrl: "/oauth-callback",
-          redirectUrlComplete: "/",
-        });
-      }
-    } catch (error: any) {
-      console.error("Github OAuth error:", error);
-    }
-  };
   const loginsub = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLoaded) {
@@ -184,6 +155,11 @@ function RouteComponent() {
           title: "Signed in Successfully",
         });
         setsubVerify("Verified!");
+        // pending
+        const user = useUser().user;
+        // const response = await axios.post("/");
+
+        // peding
         router.navigate({ to: "/" });
       }
     } catch (error: any) {
@@ -288,32 +264,6 @@ function RouteComponent() {
                     </button>
 
                     <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-
-                    <div className="flex flex-col space-y-4">
-                      <button
-                        onClick={handleGithubOAuth}
-                        className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                        type="submit"
-                      >
-                        <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                        <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                          GitHub
-                        </span>
-                        <BottomGradient />
-                      </button>
-                      {/* <GoogleOneTap /> */}
-                      <button
-                        onClick={handleGoogleOAuth}
-                        className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                        type="submit"
-                      >
-                        <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                        <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                          Google
-                        </span>
-                        <BottomGradient />
-                      </button>
-                    </div>
                   </form>
                 </TabsContent>
                 <TabsContent value="log-in">
@@ -348,31 +298,6 @@ function RouteComponent() {
                     </button>
 
                     <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-
-                    <div className="flex flex-col space-y-4">
-                      <button
-                        onClick={handleGithubOAuth}
-                        className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                        type="submit"
-                      >
-                        <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                        <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                          GitHub
-                        </span>
-                        <BottomGradient />
-                      </button>
-                      <button
-                        onClick={handleGoogleOAuth}
-                        className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                        type="submit"
-                      >
-                        <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                        <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                          Google
-                        </span>
-                        <BottomGradient />
-                      </button>
-                    </div>
                   </form>
                 </TabsContent>
               </Tabs>
