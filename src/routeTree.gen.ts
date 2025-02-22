@@ -16,6 +16,8 @@ import { Route as OauthCallbackImport } from './routes/oauth-callback'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardUserImport } from './routes/dashboard/$user'
+import { Route as DashboardCheckIndexImport } from './routes/dashboard/check/index'
+import { Route as DashboardCheckIdImport } from './routes/dashboard/check/$id'
 
 // Create/Update Routes
 
@@ -46,6 +48,18 @@ const IndexRoute = IndexImport.update({
 const DashboardUserRoute = DashboardUserImport.update({
   id: '/dashboard/$user',
   path: '/dashboard/$user',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardCheckIndexRoute = DashboardCheckIndexImport.update({
+  id: '/dashboard/check/',
+  path: '/dashboard/check/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardCheckIdRoute = DashboardCheckIdImport.update({
+  id: '/dashboard/check/$id',
+  path: '/dashboard/check/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +102,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardUserImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard/check/$id': {
+      id: '/dashboard/check/$id'
+      path: '/dashboard/check/$id'
+      fullPath: '/dashboard/check/$id'
+      preLoaderRoute: typeof DashboardCheckIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/check/': {
+      id: '/dashboard/check/'
+      path: '/dashboard/check'
+      fullPath: '/dashboard/check'
+      preLoaderRoute: typeof DashboardCheckIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -99,6 +127,8 @@ export interface FileRoutesByFullPath {
   '/oauth-callback': typeof OauthCallbackRoute
   '/sign-up': typeof SignUpRoute
   '/dashboard/$user': typeof DashboardUserRoute
+  '/dashboard/check/$id': typeof DashboardCheckIdRoute
+  '/dashboard/check': typeof DashboardCheckIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -107,6 +137,8 @@ export interface FileRoutesByTo {
   '/oauth-callback': typeof OauthCallbackRoute
   '/sign-up': typeof SignUpRoute
   '/dashboard/$user': typeof DashboardUserRoute
+  '/dashboard/check/$id': typeof DashboardCheckIdRoute
+  '/dashboard/check': typeof DashboardCheckIndexRoute
 }
 
 export interface FileRoutesById {
@@ -116,6 +148,8 @@ export interface FileRoutesById {
   '/oauth-callback': typeof OauthCallbackRoute
   '/sign-up': typeof SignUpRoute
   '/dashboard/$user': typeof DashboardUserRoute
+  '/dashboard/check/$id': typeof DashboardCheckIdRoute
+  '/dashboard/check/': typeof DashboardCheckIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -126,8 +160,17 @@ export interface FileRouteTypes {
     | '/oauth-callback'
     | '/sign-up'
     | '/dashboard/$user'
+    | '/dashboard/check/$id'
+    | '/dashboard/check'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/oauth-callback' | '/sign-up' | '/dashboard/$user'
+  to:
+    | '/'
+    | '/about'
+    | '/oauth-callback'
+    | '/sign-up'
+    | '/dashboard/$user'
+    | '/dashboard/check/$id'
+    | '/dashboard/check'
   id:
     | '__root__'
     | '/'
@@ -135,6 +178,8 @@ export interface FileRouteTypes {
     | '/oauth-callback'
     | '/sign-up'
     | '/dashboard/$user'
+    | '/dashboard/check/$id'
+    | '/dashboard/check/'
   fileRoutesById: FileRoutesById
 }
 
@@ -144,6 +189,8 @@ export interface RootRouteChildren {
   OauthCallbackRoute: typeof OauthCallbackRoute
   SignUpRoute: typeof SignUpRoute
   DashboardUserRoute: typeof DashboardUserRoute
+  DashboardCheckIdRoute: typeof DashboardCheckIdRoute
+  DashboardCheckIndexRoute: typeof DashboardCheckIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -152,6 +199,8 @@ const rootRouteChildren: RootRouteChildren = {
   OauthCallbackRoute: OauthCallbackRoute,
   SignUpRoute: SignUpRoute,
   DashboardUserRoute: DashboardUserRoute,
+  DashboardCheckIdRoute: DashboardCheckIdRoute,
+  DashboardCheckIndexRoute: DashboardCheckIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -168,7 +217,9 @@ export const routeTree = rootRoute
         "/about",
         "/oauth-callback",
         "/sign-up",
-        "/dashboard/$user"
+        "/dashboard/$user",
+        "/dashboard/check/$id",
+        "/dashboard/check/"
       ]
     },
     "/": {
@@ -185,6 +236,12 @@ export const routeTree = rootRoute
     },
     "/dashboard/$user": {
       "filePath": "dashboard/$user.tsx"
+    },
+    "/dashboard/check/$id": {
+      "filePath": "dashboard/check/$id.tsx"
+    },
+    "/dashboard/check/": {
+      "filePath": "dashboard/check/index.tsx"
     }
   }
 }
