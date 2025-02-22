@@ -4,7 +4,6 @@ import * as React from "react";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import {
 	ColumnDef,
-	ColumnFiltersState,
 	SortingState,
 	VisibilityState,
 	flexRender,
@@ -14,19 +13,10 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
+import axios from "../api/axios";
 
 import { Button } from "../components/ui/button";
-import { Checkbox } from "../components/ui/checkbox";
-import {
-	DropdownMenu,
-	DropdownMenuCheckboxItem,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu";
 import { Input } from "../components/ui/input";
 import {
 	Table,
@@ -37,66 +27,25 @@ import {
 	TableRow,
 } from "../components/ui/table";
 
-const data: Resources[] = [
-	{
-		id: "m5gr84i9",
-		days: 316,
-		disease: "lorem",
-		name: "ken99@yahoo.com",
-	},
-	{
-		id: "m5gr84i9",
-		days: 316,
-		disease: "lorem",
-		name: "ken99@yahoo.com",
-	},
-	{
-		id: "3u1reuv4",
-		days: 242,
-		disease: "lorem",
-		name: "Abe45@gmail.com",
-	},
-	{
-		id: "derv1ws0",
-		days: 837,
-		disease: "lorem",
-		name: "Monserrat44@gmail.com",
-	},
-	{
-		id: "5kma53ae",
-		days: 874,
-		disease: "lorem",
-		name: "Silas22@gmail.com",
-	},
-	{
-		id: "bhqecj4p",
-		days: 721,
-		disease: "lorem",
-		name: "carmella@hotmail.com",
-	},
-];
-
 export type Resources = {
 	id: string;
-	days: number;
-	disease: string;
 	name: string;
+	disease: number;
+	days: number;
+	email: string;
 };
 
 export const columns: ColumnDef<Resources>[] = [
 	{
 		accessorKey: "name",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Name
-					<ArrowUpDown />
-				</Button>
-			);
-		},
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Name <ArrowUpDown />
+			</Button>
+		),
 		cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
 	},
 	{
@@ -109,43 +58,45 @@ export const columns: ColumnDef<Resources>[] = [
 	{
 		accessorKey: "days",
 		header: "Days",
-		cell: ({ row }) => {
-			const days = parseFloat(row.getValue("days"));
-
-			return <div className=" font-medium">{days}</div>;
-		},
-	},
-	{
-		id: "select",
-		header: ({ table }) => (
-			<Checkbox
-				checked={
-					table.getIsAllPageRowsSelected() ||
-					(table.getIsSomePageRowsSelected() && "indeterminate")
-				}
-				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-				aria-label="Select all"
-			/>
-		),
 		cell: ({ row }) => (
-			<Checkbox
-				checked={row.getIsSelected()}
-				onCheckedChange={(value) => row.toggleSelected(!!value)}
-				aria-label="Select row"
-			/>
+			<div className="font-medium">{row.getValue("days")}</div>
 		),
-		enableSorting: false,
-		enableHiding: false,
 	},
 ];
 
 export function Resources_table() {
-	const routeAPI = getRouteApi("/dashboard/$user");
-	const params = routeAPI.useParams();
+	const [data, setData] = React.useState<Resources[]>([]);
+
+	React.useEffect(() => {
+		async function getData() {
+			try {
+				const response = await axios.get(
+					"http://localhost:3000/api/inventory/get-all-readmisson"
+				);
+
+				// Ensure we extract `data` correctly from the response
+				const apiData = response.data.data || [];
+
+				const transformedData = apiData.map((item: any) => ({
+					id: item._id,
+					name: item.name,
+					disease: item.disease,
+					days: Math.ceil(
+						(Date.now() - new Date(item.startAt).getTime()) /
+							(1000 * 60 * 60 * 24)
+					),
+				}));
+
+				setData(transformedData);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
+		}
+
+		getData();
+	}, []);
+
 	const [sorting, setSorting] = React.useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[]
-	);
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = React.useState({});
@@ -154,7 +105,6 @@ export function Resources_table() {
 		data,
 		columns,
 		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
@@ -163,14 +113,11 @@ export function Resources_table() {
 		onRowSelectionChange: setRowSelection,
 		state: {
 			sorting,
-			columnFilters,
 			columnVisibility,
 			rowSelection,
 		},
 		initialState: {
-			pagination: {
-				pageSize: 10,
-			},
+			pagination: { pageSize: 10 },
 		},
 	});
 
@@ -185,50 +132,22 @@ export function Resources_table() {
 					}
 					className="max-w-sm"
 				/>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="ml-auto">
-							Columns <ChevronDown />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => {
-								return (
-									<DropdownMenuCheckboxItem
-										key={column.id}
-										className="capitalize"
-										checked={column.getIsVisible()}
-										onCheckedChange={(value) =>
-											column.toggleVisibility(!!value)
-										}
-									>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								);
-							})}
-					</DropdownMenuContent>
-				</DropdownMenu>
 			</div>
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext()
-													)}
-										</TableHead>
-									);
-								})}
+								{headerGroup.headers.map((header) => (
+									<TableHead key={header.id}>
+										{header.isPlaceholder
+											? null
+											: flexRender(
+													header.column.columnDef.header,
+													header.getContext()
+												)}
+									</TableHead>
+								))}
 							</TableRow>
 						))}
 					</TableHeader>
@@ -241,15 +160,17 @@ export function Resources_table() {
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
-                                            <Link
-                                                params={{ id: row.original.id }}
-                                                to="/dashboard/check/$id"
-                                            >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </Link>
+											<Link
+												params={{
+													email: row.original.id,
+												}}
+												to="/dashboard/check/patientInfo"
+											>
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext()
+												)}
+											</Link>
 										</TableCell>
 									))}
 								</TableRow>
