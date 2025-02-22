@@ -23,7 +23,7 @@ const components: { title: string; href: string; description: string }[] = [
   },
   {
     title: "Hover Card",
-    href: "/",
+    href: "/dashboard/niraj",
     description:
       "For sighted users to preview content available behind a link.",
   },

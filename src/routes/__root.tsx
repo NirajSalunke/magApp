@@ -1,6 +1,5 @@
-// import * as React from "react";
 import { Outlet, createRootRoute, useLocation } from "@tanstack/react-router";
-// import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+
 import { ClerkProvider } from "@clerk/clerk-react";
 import { Toaster } from "../components/ui/toaster";
 import Navbar from "../components/Navbar";
@@ -18,7 +17,9 @@ function RootComponent() {
     <>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
         <Toaster />
-        {location !== "/sign-up" && <Navbar />}
+        {location !== "/sign-up" && !location.startsWith("/dashboard") && (
+          <Navbar />
+        )}
         <Outlet />
       </ClerkProvider>
     </>
