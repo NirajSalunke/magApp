@@ -12,7 +12,9 @@ import {
   IconBrandTabler,
   IconSettings,
   IconUserBolt,
+  IconUserCancel,
   IconUserCheck,
+  IconUserCircle,
   IconUserCode,
   IconUsers,
 } from "@tabler/icons-react";
@@ -25,6 +27,8 @@ import { Adminis_tabs } from "../../components/Adminis_tabs";
 import Assis_tab from "../../components/Assis_tab";
 import CreatePat from "../../components/createPat";
 import UpdatePat from "../../components/UpdatePat";
+// import { DiscAlbum } from "lucide-react";
+import Discharge from "../../components/Discharge";
 // import { Button } from "../../components/ui/button";
 export const Route = createFileRoute("/dashboard/$user")({
   component: RouteComponent,
@@ -61,17 +65,17 @@ function RouteComponent() {
       ),
     },
     {
-      label: "Add Treatment",
+      label: "Add Treatment ",
       func: () => setComp(<UpdatePat />),
       icon: (
         <IconUserCheck className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
-      label: "Settings",
-      href: "#",
+      label: "Discharge Patient",
+      func: () => setComp(<Discharge />),
       icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconUserCancel className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
   ];
