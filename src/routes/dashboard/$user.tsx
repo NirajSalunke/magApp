@@ -1,4 +1,5 @@
 // import { IconSettings } from "@tabler/icons-react";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import {
 	createFileRoute,
 	getRouteApi,
@@ -8,29 +9,47 @@ import {
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar";
 import {
-	IconArrowLeft,
 	IconBrandTabler,
 	IconSettings,
 	IconUserBolt,
+	IconUserCancel,
 	IconUserCheck,
-	IconUserCode,
 	IconUsers,
 } from "@tabler/icons-react";
-// import { Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 // import { motion } from "framer-motion";
 const routeAPI = getRouteApi("/dashboard/$user");
 import { cn } from "../../lib/utils";
-import { SignedIn, UserButton } from "@clerk/clerk-react";
+import { SignedIn, UserButton, useUser } from "@clerk/clerk-react";
 import { Adminis_tabs } from "../../components/Adminis_tabs";
 import Assis_tab from "../../components/Assis_tab";
-import CreatePat from "../../components/createPat";
+import CreatePat from "../../components/CreatePat";
 import UpdatePat from "../../components/UpdatePat";
-// import { Button } from "../../components/ui/button";
+// import { DiscAlbum } from "lucide-react";
+import Discharge from "../../components/Discharge";
+import { Button } from "../../components/ui/button";
 export const Route = createFileRoute("/dashboard/$user")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
+	const { isSignedIn } = useUser();
+	const currUser = useUser().user;
+	if (!isSignedIn) {
+		return (
+			<>
+				<div className="text-center w-screen h-screen flex flex-col gap-10 justify-center items-center">
+					<div className="font-bold text-3xl max-w-[50vw]">
+						Hey {useUser().user?.firstName} , You have not filled out the whole
+						autobiography earlier. Let’s get back, waiting for you!
+					</div>
+					<Button>
+						<Link to={"/sign-up"}>Let's know each other.</Link>
+					</Button>
+				</div>
+			</>
+		);
+	}
 	const params = routeAPI.useParams();
 	let [user, setUser] = useState("");
 	const [comp, setComp] = useState(<Assis_tab />);
@@ -61,17 +80,17 @@ function RouteComponent() {
 			),
 		},
 		{
-			label: "Add Treatment",
+			label: "Add Treatment ",
 			func: () => setComp(<UpdatePat />),
 			icon: (
 				<IconUserCheck className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
 			),
 		},
 		{
-			label: "Settings",
-			href: "#",
+			label: "Discharge Patient",
+			func: () => setComp(<Discharge />),
 			icon: (
-				<IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+				<IconUserCancel className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
 			),
 		},
 	];
