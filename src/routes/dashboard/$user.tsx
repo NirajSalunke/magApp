@@ -1,11 +1,5 @@
 // import { IconSettings } from "@tabler/icons-react";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
-import {
-	createFileRoute,
-	getRouteApi,
-	useParams,
-	useRouter,
-} from "@tanstack/react-router";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar";
 import {
