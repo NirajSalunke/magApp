@@ -177,7 +177,7 @@ function RouteComponent() {
         </div>
       ) : (
         <div className="w-screen h-screen transition-all flex justify-center items-center">
-          <div className="w-1/2 h-screen  bg-black">
+          <div className="w-1/2 h-screen md:block hidden   bg-black">
             <img
               src="/3.jpg"
               alt="img"
@@ -185,10 +185,13 @@ function RouteComponent() {
               loading="lazy"
             />
           </div>
-          <div className="max-w-md w-1/2 mx-auto rounded-none flex flex-col gap-3  md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+          <div className="max-w-md md:w-1/2 w-full mx-auto rounded-none flex flex-col gap-3  md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
             <h2 className="font-bold text-xl text-center text-neutral-800 dark:text-neutral-200">
-              Welcome to Vault-Base
+              Welcome to MediTrack AI
             </h2>
+            <p className="  text-center text-neutral-800 dark:text-neutral-200">
+              All in one solution for Health Care and Inventory Management!
+            </p>
             {!pendingVerification ? (
               <Tabs defaultValue="sign-up" className="w-[400px]">
                 <TabsList className="grid w-full grid-cols-2">
