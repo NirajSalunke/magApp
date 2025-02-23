@@ -87,7 +87,7 @@ function HomeComponent() {
       }
     };
     sign();
-  }, [isSignedIn, user]);
+  }, [user]);
   // const words = `M e d i T r a c k  A I`;
   return (
     <main className="p-2 w-screen ">
