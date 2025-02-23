@@ -49,7 +49,7 @@ function RouteComponent() {
   const [subMessage, setsubMessage] = useState("Sign up");
   const [subMessage1, setsubMessage1] = useState("Log in");
   const [subVerify, setsubVerify] = useState("Verify");
-
+  const origin_api = import.meta.env.VITE_BACKEND_URL;
   if (!isLoaded) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
@@ -150,17 +150,7 @@ function RouteComponent() {
         await setActive({
           session: CompleteSignUp.createdSessionId,
         });
-        toast({
-          variant: "default",
-          title: "Signed in Successfully",
-        });
         setsubVerify("Verified!");
-        // pending
-        const user = useUser().user;
-        // const response = await axios.post("/");
-
-        // peding
-        router.navigate({ to: "/" });
       }
     } catch (error: any) {
       toast({

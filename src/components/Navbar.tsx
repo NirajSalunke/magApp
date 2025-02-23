@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-
+const origin_api = import.meta.env.VITE_BACKEND_URL;
 import { cn } from "../lib/utils";
 import {
   NavigationMenu,
@@ -11,9 +11,13 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
+import { useToast } from "../hooks/use-toast";
 import { HomeIcon } from "lucide-react";
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { Button } from "./ui/button";
+import axios from "axios";
+import { IconMedicalCrossCircle } from "@tabler/icons-react";
+// import { toast } from "@/hooks/use-toast";
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Alert Dialog",
@@ -52,10 +56,21 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 const Navbar = () => {
+  const user = useUser().user;
+  const { toast } = useToast();
+  const { isSignedIn } = useUser();
+  const [role, setRole] = useState("");
+  useEffect(() => {
+    if (user?.emailAddresses[0].emailAddress === "ctrlaltniraj@gmail.com") {
+      setRole("administrator");
+    } else {
+      setRole("assistant");
+    }
+  }, [role]);
   return (
-    <div className="w-screen h-[10vh] flex p-10  items-center justify-between">
-      <div className="flex justify-center items-center">
-        <HomeIcon className="" />
+    <div className="w-screen h-[10vh] flex px-10  items-center justify-between">
+      <div className="flex gap-2  font-bold items-center">
+        <IconMedicalCrossCircle /> MediTrack AI
       </div>
       <div className="flex gap-10">
         <NavigationMenu>
@@ -113,13 +128,15 @@ const Navbar = () => {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link to="/about">
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Documentation
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            <SignedIn>
+              <NavigationMenuItem>
+                <Link params={{ user: role }} to="/dashboard/$user">
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Dashboard
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </SignedIn>
           </NavigationMenuList>
         </NavigationMenu>
         <div className="h-[10vh] flex justify-center items-center">
