@@ -26,7 +26,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "../components/ui/table";
-
+const origin_api = import.meta.env.VITE_BACKEND_URL;
 export type Resources = {
 	id: string;
 	name: string;
@@ -71,7 +71,7 @@ export function Resources_table() {
 		async function getData() {
 			try {
 				const response = await axios.get(
-					"http://localhost:3000/api/inventory/get-all-readmisson"
+					`${origin_api}/api/inventory/get-all-readmisson`
 				);
 
 				// Ensure we extract `data` correctly from the response
