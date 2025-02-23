@@ -14,17 +14,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
+import { ArrowUpDown, ChevronDown } from "lucide-react";
+const origin_api = import.meta.env.VITE_BACKEND_URL;
 import { Button } from "../components/ui/button";
 import { Checkbox } from "../components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
 import { Input } from "../components/ui/input";
@@ -36,45 +33,10 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-
-const data: Resources[] = [
-  {
-    id: "m5gr84i9",
-    age: 14,
-    email: "nirajsalunke07@gmail.com",
-    name: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    age: 12,
-    email: "nirajsalunke07@gmail.com",
-    name: "ken99@yahoo.com",
-  },
-  //   {
-  //     id: "3u1reuv4",
-  //     days: 242,
-  //     disease: "lorem",
-  //     name: "Abe45@gmail.com",
-  //   },
-  //   {
-  //     id: "derv1ws0",
-  //     days: 837,
-  //     disease: "lorem",
-  //     name: "Monserrat44@gmail.com",
-  //   },
-  //   {
-  //     id: "5kma53ae",
-  //     days: 874,
-  //     disease: "lorem",
-  //     name: "Silas22@gmail.com",
-  //   },
-  //   {
-  //     id: "bhqecj4p",
-  //     days: 721,
-  //     disease: "lorem",
-  //     name: "carmella@hotmail.com",
-  //   },
-];
+import axios from "axios";
+import { useUser } from "@clerk/clerk-react";
+import { useToast } from "../hooks/use-toast";
+import { setDate } from "date-fns";
 
 export type Resources = {
   name: string;
@@ -136,8 +98,48 @@ export const columns: ColumnDef<Resources>[] = [
     enableHiding: false,
   },
 ];
-
+// const data: Resources[] = [];
 export default function Assis_table() {
+  const name = useUser().user?.fullName;
+  const { toast } = useToast();
+  const [data, setData] = React.useState<Resources[]>([]);
+  const user = useUser().user;
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        `${origin_api}/api/assistant/get-all-patients-of-assistant?assistant=${name}`
+      );
+      // console.log(response);
+      if (response.data.success) {
+        const dataRaw = response.data.data;
+        const transfromedData = dataRaw.map((obj: any) => ({
+          id: obj.id,
+          name: obj.name,
+          age: obj.age,
+          email: obj.email,
+        }));
+        // console.log(data);
+        setData(transfromedData);
+        // setData(response.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Failed to load data",
+      });
+    }
+  };
+
+  let flag = true;
+  React.useEffect(() => {
+    if (flag) {
+      getData();
+      flag = false;
+    }
+  }, [name]);
+
   const routeAPI = getRouteApi("/dashboard/$user");
   const params = routeAPI.useParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);

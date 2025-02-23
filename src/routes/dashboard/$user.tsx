@@ -11,7 +11,6 @@ import {
 	IconUsers,
 } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
-// import { motion } from "framer-motion";
 const routeAPI = getRouteApi("/dashboard/$user");
 import { cn } from "../../lib/utils";
 import { SignedIn, UserButton, useUser } from "@clerk/clerk-react";
@@ -19,7 +18,6 @@ import { Adminis_tabs } from "../../components/Adminis_tabs";
 import Assis_tab from "../../components/Assis_tab";
 import CreatePat from "../../components/CreatePat";
 import UpdatePat from "../../components/UpdatePat";
-// import { DiscAlbum } from "lucide-react";
 import Discharge from "../../components/Discharge";
 import { Button } from "../../components/ui/button";
 export const Route = createFileRoute("/dashboard/$user")({
@@ -103,13 +101,13 @@ function RouteComponent() {
 				<IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
 			),
 		},
-		// {
-		// 	label: "Settings",
-		// 	func: () => setComp1(<Adminis_tabs />),
-		// 	icon: (
-		// 		<IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-		// 	),
-		// },
+		{
+			label: "Settings",
+			func: () => setComp1(<Adminis_tabs />),
+			icon: (
+				<IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+			),
+		},
 	];
 	const [open, setOpen] = useState(false);
 	return (
@@ -117,7 +115,7 @@ function RouteComponent() {
 			<div
 				className={cn(
 					"rounded-md flex flex-col  md:flex-row bg-gray-100 dark:bg-neutral-800 w-screen flex-1  mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-					"h-[100vh] " // for your use case, use `h-screen` instead of `h-[60vh]`
+					"h-[100vh] "
 				)}
 			>
 				<Sidebar open={open} setOpen={setOpen} animate={true}>
@@ -126,7 +124,6 @@ function RouteComponent() {
 							<div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
 								<div className="mt-8 flex flex-col gap-2">
 									{links_assistant.map((link, idx) => (
-										// <Button className=""></Button>
 										<SidebarLink key={idx} link={link} />
 									))}
 								</div>
