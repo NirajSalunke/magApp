@@ -15,8 +15,7 @@ import { Route as SignUpImport } from './routes/sign-up'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardUserImport } from './routes/dashboard/$user'
-import { Route as DashboardCheckIndexImport } from './routes/dashboard/check/index'
-import { Route as DashboardCheckIdImport } from './routes/dashboard/check/$id'
+import { Route as DashboardPatientEmailImport } from './routes/dashboard/patient/$email'
 
 // Create/Update Routes
 
@@ -44,15 +43,9 @@ const DashboardUserRoute = DashboardUserImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardCheckIndexRoute = DashboardCheckIndexImport.update({
-  id: '/dashboard/check/',
-  path: '/dashboard/check/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardCheckIdRoute = DashboardCheckIdImport.update({
-  id: '/dashboard/check/$id',
-  path: '/dashboard/check/$id',
+const DashboardPatientEmailRoute = DashboardPatientEmailImport.update({
+  id: '/dashboard/patient/$email',
+  path: '/dashboard/patient/$email',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,18 +81,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardUserImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard/check/$id': {
-      id: '/dashboard/check/$id'
-      path: '/dashboard/check/$id'
-      fullPath: '/dashboard/check/$id'
-      preLoaderRoute: typeof DashboardCheckIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/dashboard/check/': {
-      id: '/dashboard/check/'
-      path: '/dashboard/check'
-      fullPath: '/dashboard/check'
-      preLoaderRoute: typeof DashboardCheckIndexImport
+    '/dashboard/patient/$email': {
+      id: '/dashboard/patient/$email'
+      path: '/dashboard/patient/$email'
+      fullPath: '/dashboard/patient/$email'
+      preLoaderRoute: typeof DashboardPatientEmailImport
       parentRoute: typeof rootRoute
     }
   }
@@ -112,8 +98,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/sign-up': typeof SignUpRoute
   '/dashboard/$user': typeof DashboardUserRoute
-  '/dashboard/check/$id': typeof DashboardCheckIdRoute
-  '/dashboard/check': typeof DashboardCheckIndexRoute
+  '/dashboard/patient/$email': typeof DashboardPatientEmailRoute
 }
 
 export interface FileRoutesByTo {
@@ -121,8 +106,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/sign-up': typeof SignUpRoute
   '/dashboard/$user': typeof DashboardUserRoute
-  '/dashboard/check/$id': typeof DashboardCheckIdRoute
-  '/dashboard/check': typeof DashboardCheckIndexRoute
+  '/dashboard/patient/$email': typeof DashboardPatientEmailRoute
 }
 
 export interface FileRoutesById {
@@ -131,8 +115,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/sign-up': typeof SignUpRoute
   '/dashboard/$user': typeof DashboardUserRoute
-  '/dashboard/check/$id': typeof DashboardCheckIdRoute
-  '/dashboard/check/': typeof DashboardCheckIndexRoute
+  '/dashboard/patient/$email': typeof DashboardPatientEmailRoute
 }
 
 export interface FileRouteTypes {
@@ -142,24 +125,21 @@ export interface FileRouteTypes {
     | '/about'
     | '/sign-up'
     | '/dashboard/$user'
-    | '/dashboard/check/$id'
-    | '/dashboard/check'
+    | '/dashboard/patient/$email'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/sign-up'
     | '/dashboard/$user'
-    | '/dashboard/check/$id'
-    | '/dashboard/check'
+    | '/dashboard/patient/$email'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/sign-up'
     | '/dashboard/$user'
-    | '/dashboard/check/$id'
-    | '/dashboard/check/'
+    | '/dashboard/patient/$email'
   fileRoutesById: FileRoutesById
 }
 
@@ -168,8 +148,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   SignUpRoute: typeof SignUpRoute
   DashboardUserRoute: typeof DashboardUserRoute
-  DashboardCheckIdRoute: typeof DashboardCheckIdRoute
-  DashboardCheckIndexRoute: typeof DashboardCheckIndexRoute
+  DashboardPatientEmailRoute: typeof DashboardPatientEmailRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -177,8 +156,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   SignUpRoute: SignUpRoute,
   DashboardUserRoute: DashboardUserRoute,
-  DashboardCheckIdRoute: DashboardCheckIdRoute,
-  DashboardCheckIndexRoute: DashboardCheckIndexRoute,
+  DashboardPatientEmailRoute: DashboardPatientEmailRoute,
 }
 
 export const routeTree = rootRoute
@@ -195,8 +173,7 @@ export const routeTree = rootRoute
         "/about",
         "/sign-up",
         "/dashboard/$user",
-        "/dashboard/check/$id",
-        "/dashboard/check/"
+        "/dashboard/patient/$email"
       ]
     },
     "/": {
@@ -211,11 +188,8 @@ export const routeTree = rootRoute
     "/dashboard/$user": {
       "filePath": "dashboard/$user.tsx"
     },
-    "/dashboard/check/$id": {
-      "filePath": "dashboard/check/$id.tsx"
-    },
-    "/dashboard/check/": {
-      "filePath": "dashboard/check/index.tsx"
+    "/dashboard/patient/$email": {
+      "filePath": "dashboard/patient/$email.tsx"
     }
   }
 }

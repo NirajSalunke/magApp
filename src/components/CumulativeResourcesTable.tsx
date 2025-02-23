@@ -27,65 +27,49 @@ import {
 	TableRow,
 } from "../components/ui/table";
 
-export type Resources = {
-	id: string;
-	name: string;
-	disease: number;
-	days: number;
-	email: string;
+export type Resource = {
+	key: string;
+	value: number;
 };
 
-export const columns: ColumnDef<Resources>[] = [
+export const columns: ColumnDef<Resource>[] = [
 	{
-		accessorKey: "name",
+		accessorKey: "key",
 		header: ({ column }) => (
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
-				Name <ArrowUpDown />
+				Key <ArrowUpDown />
 			</Button>
 		),
-		cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+		cell: ({ row }) => <div className="lowercase">{row.getValue("key")}</div>,
 	},
 	{
-		accessorKey: "disease",
-		header: "Disease",
+		accessorKey: "value",
+		header: "Value",
 		cell: ({ row }) => (
-			<div className="capitalize">{row.getValue("disease")}</div>
-		),
-	},
-	{
-		accessorKey: "days",
-		header: "Days",
-		cell: ({ row }) => (
-			<div className="font-medium">{row.getValue("days")}</div>
+			<div className="font-medium">{row.getValue("value")}</div>
 		),
 	},
 ];
 
-export function Resources_table() {
-	const [data, setData] = React.useState<Resources[]>([]);
+export function CumulativeResourceTable() {
+	const [data, setData] = React.useState<Resource[]>([]);
 
 	React.useEffect(() => {
 		async function getData() {
 			try {
 				const response = await axios.get(
-					"http://localhost:3000/api/inventory/get-all-readmisson"
+					"http://localhost:3000/api/inventory/get-cumulative-resources"
 				);
 
 				// Ensure we extract `data` correctly from the response
-				const apiData = response.data.data || [];
+				const apiData = response.data.data || {};
 
-				const transformedData = apiData.map((item: any) => ({
-					id: item._id,
-					name: item.name,
-					disease: item.disease,
-					days: Math.ceil(
-						(Date.now() - new Date(item.startAt).getTime()) /
-							(1000 * 60 * 60 * 24)
-					),
-					email: item.email,
+				const transformedData = Object.entries(apiData).map(([key, value]) => ({
+					key,
+					value: value as number,
 				}));
 
 				setData(transformedData);
@@ -126,10 +110,10 @@ export function Resources_table() {
 		<div className="w-full">
 			<div className="flex items-center py-4">
 				<Input
-					placeholder="Filter names..."
-					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+					placeholder="Filter keys..."
+					value={(table.getColumn("key")?.getFilterValue() as string) ?? ""}
 					onChange={(event) =>
-						table.getColumn("name")?.setFilterValue(event.target.value)
+						table.getColumn("key")?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
 				/>
@@ -161,17 +145,10 @@ export function Resources_table() {
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
-											<Link
-												params={{
-													email: row.original.email,
-												}}
-												to="/dashboard/patient/$email"
-											>
-												{flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext()
-												)}
-											</Link>
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext()
+											)}
 										</TableCell>
 									))}
 								</TableRow>
