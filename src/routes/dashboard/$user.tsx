@@ -5,6 +5,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar";
 import {
 	IconBrandTabler,
 	IconSettings,
+	IconUserBitcoin,
 	IconUserBolt,
 	IconUserCancel,
 	IconUserCheck,
@@ -58,6 +59,13 @@ function RouteComponent() {
 	}, [params.user]);
 	const links_assistant = [
 		{
+			label: "MediTrack AI",
+			func: () => setComp(<Assis_tab />),
+			icon: (
+				<IconUserBitcoin className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+			),
+		},
+		{
 			label: "Patients",
 			func: () => setComp(<Assis_tab />),
 			icon: (
@@ -88,26 +96,20 @@ function RouteComponent() {
 	];
 	const links_administrator = [
 		{
+			label: "MediTrack AI",
+			func: () => setComp(<Assis_tab />),
+			icon: (
+				<IconUserBitcoin className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+			),
+		},
+		{
 			label: "Dashboard",
 			func: () => setComp1(<Adminis_tabs />),
 			icon: (
 				<IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
 			),
 		},
-		{
-			label: "Profile",
-			func: () => setComp1(<div>Hello</div>),
-			icon: (
-				<IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-			),
-		},
-		{
-			label: "Settings",
-			func: () => setComp1(<Adminis_tabs />),
-			icon: (
-				<IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-			),
-		},
+		
 	];
 	const [open, setOpen] = useState(false);
 	return (
@@ -121,6 +123,7 @@ function RouteComponent() {
 				<Sidebar open={open} setOpen={setOpen} animate={true}>
 					{user === "assistant" ? (
 						<SidebarBody className="justify-between gap-10">
+							
 							<div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
 								<div className="mt-8 flex flex-col gap-2">
 									{links_assistant.map((link, idx) => (
@@ -136,7 +139,9 @@ function RouteComponent() {
 						</SidebarBody>
 					) : (
 						<SidebarBody className="justify-between gap-10">
+							
 							<div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+							{/* <div></div> */}
 								<div className="mt-8 flex flex-col gap-2">
 									{links_administrator.map((link, idx) => (
 										<SidebarLink key={idx} link={link} />

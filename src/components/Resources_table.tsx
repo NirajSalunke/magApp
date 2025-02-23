@@ -75,17 +75,26 @@ export function Resources_table() {
 				);
 
 				// Ensure we extract `data` correctly from the response
+				const diseases = [
+					"Asthama",
+					"COPD",
+					"Cancer",
+					"Diabetes",
+					"Heart Disease",
+					"Hypertension",
+					"Infection",
+					"Kidney Disease",
+					"Liver Disease",
+					"Mental Health"
+				  ];
 				const apiData = response.data.data || [];
-
+				console.log(apiData);
 				const transformedData = apiData.map((item: any) => ({
 					id: item._id,
-					name: item.name,
-					disease: item.disease,
-					days: Math.ceil(
-						(Date.now() - new Date(item.startAt).getTime()) /
-							(1000 * 60 * 60 * 24)
-					),
-					email: item.email,
+					name: item._doc.name,
+					disease: diseases[item._doc.disease],
+					days:item.days,
+					email: item._doc.email,
 				}));
 
 				setData(transformedData);
