@@ -25,6 +25,7 @@ import { Checkbox } from "./ui/checkbox";
 import axios from "axios";
 import { useToast } from "../hooks/use-toast";
 import { useRouter } from "@tanstack/react-router";
+import { useUser } from "@clerk/clerk-react";
 
 const origin_api = import.meta.env.VITE_BACKEND_URL;
 const LabelInputContainer = ({
@@ -52,12 +53,13 @@ const UpdatePat = () => {
   const [majorInjury, setmajoyInjury] = useState("");
   const [injury, setinjury] = useState(0);
   const [facility, setfacility] = useState(false);
-  const [assistant, setAssistant] = useState("");
+  const assistant = useUser().user?.fullName;
   const [doctor, setDoctor] = useState("");
   const handleCheckboxChange2 = (checked: boolean) => {
     setfacility(checked);
   };
-  const submit = async () => {
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
     const data = {
       email,
       updateData: {
@@ -73,6 +75,7 @@ const UpdatePat = () => {
         status: "admitted",
       },
     };
+
     try {
       const response = await axios.post(
         `${origin_api}/api/assistant/create-treatment`,
@@ -99,11 +102,11 @@ const UpdatePat = () => {
       setSubMessage("Process Failed, Try again! ");
       toast({
         variant: "destructive",
-        title: "Treatment Added",
-        description: "Treatment Added Successfully, Redirecting",
+        title: "Treatment Failed",
+        description: "Treatment Failed , ",
       });
       setTimeout(() => {
-        setSubMessage("Add Treatme  nt");
+        setSubMessage("Add Treatment");
       }, 2000);
     }
   };
@@ -275,16 +278,6 @@ const UpdatePat = () => {
                 onChange={(e) => setDoctor(e.target.value)}
                 value={doctor}
                 placeholder="Dr. Niraj"
-                type="text"
-              />
-            </LabelInputContainer>
-            <LabelInputContainer>
-              <Label htmlFor="assistant">Assistant&apos;s name</Label>
-              <Input
-                id="assistant"
-                value={assistant}
-                onChange={(e) => setAssistant(e.target.value)}
-                placeholder="Trupti"
                 type="text"
               />
             </LabelInputContainer>

@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { Checkbox } from "./ui/checkbox";
+import { useUser } from "@clerk/clerk-react";
 const LabelInputContainer = ({
   children,
   className,
@@ -72,7 +73,8 @@ const CreatePat = () => {
   const [facility, setfacility] = useState(false);
 
   const [doctor, setDoctor] = useState("");
-  const [assistant, setAssistant] = useState("");
+  // const [assistant, setAssistant] = useState(useUser().user?.fullName);
+  const assistant = useUser().user?.fullName;
   const handleCheckboxChange2 = (checked: boolean) => {
     setfacility(checked);
   };
@@ -396,16 +398,6 @@ const CreatePat = () => {
                   onChange={(e) => setDoctor(e.target.value)}
                   value={doctor}
                   placeholder="Dr. Niraj"
-                  type="text"
-                />
-              </LabelInputContainer>
-              <LabelInputContainer>
-                <Label htmlFor="assistant">Assistant&apos;s name</Label>
-                <Input
-                  id="assistant"
-                  value={assistant}
-                  onChange={(e) => setAssistant(e.target.value)}
-                  placeholder="Trupti"
                   type="text"
                 />
               </LabelInputContainer>
